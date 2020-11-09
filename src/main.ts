@@ -12,7 +12,6 @@ import store from '@/store'
 import router from '@/router'
 import '@/icons/components'
 import '@/permission'
-
 Vue.use(ElementUI)
 Vue.use(SvgIcon, {
   tagName: 'svg-icon',

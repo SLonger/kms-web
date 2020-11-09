@@ -13,18 +13,17 @@
           Login Form
         </h3>
       </div>
-
-      <el-form-item prop="username">
+      <el-form-item prop="account">
         <span class="svg-container">
           <svg-icon name="user" />
         </span>
         <el-input
-          ref="username"
-          v-model="loginForm.username"
-          name="username"
+          ref="account"
+          v-model="loginForm.account"
+          name="account"
           type="text"
           autocomplete="on"
-          placeholder="username"
+          placeholder="account"
         />
       </el-form-item>
 
@@ -98,12 +97,12 @@ export default class extends Vue {
   }
 
   private loginForm = {
-    username: 'admin',
-    password: '111111'
+    account: 'admin',
+    password: 'rootroot'
   }
 
   private loginRules = {
-    username: [{ validator: this.validateUsername, trigger: 'blur' }],
+    account: [{ validator: this.validateUsername, trigger: 'blur' }],
     password: [{ validator: this.validatePassword, trigger: 'blur' }]
   }
 
@@ -125,8 +124,8 @@ export default class extends Vue {
   }
 
   mounted() {
-    if (this.loginForm.username === '') {
-      (this.$refs.username as Input).focus()
+    if (this.loginForm.account === '') {
+      (this.$refs.account as Input).focus()
     } else if (this.loginForm.password === '') {
       (this.$refs.password as Input).focus()
     }
@@ -152,7 +151,7 @@ export default class extends Vue {
           path: this.redirect || '/',
           query: this.otherQuery
         })
-        // Just to simulate the time of the request
+        // Just to simulate the time of the request 
         setTimeout(() => {
           this.loading = false
         }, 0.5 * 1000)

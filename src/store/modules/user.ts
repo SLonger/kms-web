@@ -2,6 +2,7 @@ import { VuexModule, Module, Action, Mutation, getModule } from 'vuex-module-dec
 import { login, logout, getUserInfo } from '@/api/users'
 import { getToken, setToken, removeToken } from '@/utils/cookies'
 import store from '@/store'
+import { format } from 'path'
 
 export interface IUserState {
   token: string
@@ -44,13 +45,13 @@ class User extends VuexModule implements IUserState {
     this.roles = roles
   }
 
-  @Action
-  public async Login(userInfo: { username: string, password: string }) {
-    let { username, password } = userInfo
-    username = username.trim()
-    const { data } = await login({ username, password })
-    setToken(data.accessToken)
-    this.SET_TOKEN(data.accessToken)
+ @Action
+  public async Login(userInfo: { account: string, password: string }) {
+    let { account, password } = userInfo
+    account = account.trim()
+    const { data } = await login({ account, password })
+    setToken(data.data.token)
+    this.SET_TOKEN(data.data.token)
   }
 
   @Action
