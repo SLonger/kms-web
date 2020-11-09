@@ -9,9 +9,9 @@ NProgress.configure({ showSpinner: false })
 
 const whiteList = ['/login']
 
-router.beforeEach(async(to: Route, _: Route, next: any) => {
+router.beforeEach(async (to: Route, _: Route, next: any) => {
   console.log('usermodule.token:', UserModule.token)// Start progress bar
-  console.log('to.path:',to.path)
+  console.log('to.path:', to.path)
   NProgress.start()
   // Determine whether the user has logged in
   if (UserModule.token) {
@@ -46,7 +46,7 @@ router.beforeEach(async(to: Route, _: Route, next: any) => {
     } else {
       // Other pages that do not have permission to access are redirected to the login page.
       console.log(`/login?redirect=${to.path}`)
-       next(`/login?redirect=${to.path}`)
+      next(`/login?redirect=${to.path}`)
       NProgress.done()
     }
   }
