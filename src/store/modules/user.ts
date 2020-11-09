@@ -45,13 +45,15 @@ class User extends VuexModule implements IUserState {
     this.roles = roles
   }
 
- @Action
+  @Action
   public async Login(userInfo: { account: string, password: string }) {
     let { account, password } = userInfo
     account = account.trim()
     const { data } = await login({ account, password })
-    setToken(data.data.token)
-    this.SET_TOKEN(data.data.token)
+
+    console.log(data)
+    setToken(data.token)
+    this.SET_TOKEN(data.token)
   }
 
   @Action
