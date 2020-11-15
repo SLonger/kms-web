@@ -5,7 +5,7 @@ import {
   Mutation,
   getModule
 } from 'vuex-module-decorators';
-import { login, logout, sign, userquery } from '@/api/users';
+import { delUser, editUser, login, logout, sign, userquery } from '@/api/users';
 import { getToken, setToken, removeToken } from '@/utils/cookies';
 import store from '@/store';
 import { format } from 'path';
@@ -78,11 +78,23 @@ class User extends VuexModule implements IUserState {
   public async Register(userInfo: UserinfoState) {
     userInfo.account = userInfo.account.trim();
     const { data } = await sign(userInfo);
+    return data;
+  }
+  @Action // 修改
+  public async EditUser(userInfo: UserinfoState) {
+    userInfo.account = userInfo.account.trim();
+    const { data } = await editUser(userInfo);
+    return data;
   }
 
   @Action // 用户查询
   public async Userquery(userinfo: { allAccount: boolean }) {
     const { data } = await userquery(userinfo);
+    return data;
+  }
+  @Action // 用户删除
+  public async delUser(account: String) {
+    const { data } = await delUser(account);
     return data;
   }
 

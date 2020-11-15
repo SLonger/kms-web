@@ -27,3 +27,15 @@ export const userquery = (data: any) =>
     method: 'post',
     data
   });
+export const delUser = (data: any) =>
+  request({
+    url: '/v1/kms/user/delete',
+    method: 'post',
+    data
+  });
+export const editUser = (data: any) =>
+  request({
+    url: '/v1/kms/user/updateinfo',
+    method: 'post',
+    data
+  });
