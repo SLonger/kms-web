@@ -14,10 +14,11 @@ export const login = (data: any) =>
     data
   });
 
-export const logout = () =>
+export const logout = (data: any) =>
   request({
-    url: '/users/logout',
-    method: 'post'
+    url: '/v1/kms/user/logout',
+    method: 'post',
+    data
   });
 
 export const userquery = (data: any) =>
