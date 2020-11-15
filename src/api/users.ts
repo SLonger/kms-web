@@ -1,21 +1,28 @@
-import request from '@/utils/request'
+import request from '@/utils/request';
 
-export const getUserInfo = (data: any) =>
+export const sign = (data: any) =>
   request({
-    url: '/users/info',
+    url: '/v1/kms/user/register',
     method: 'post',
     data
-  })
+  });
 
 export const login = (data: any) =>
   request({
     url: '/v1/kms/user/login',
     method: 'post',
     data
-  })
+  });
 
 export const logout = () =>
   request({
     url: '/users/logout',
     method: 'post'
-  })
+  });
+
+export const userquery = (data: any) =>
+  request({
+    url: '/v1/kms/user/queryInfo',
+    method: 'post',
+    data
+  });

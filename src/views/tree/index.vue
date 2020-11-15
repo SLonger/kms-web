@@ -1,80 +1,38 @@
 <template>
-  <div class="app-container">
-    <el-input
-      v-model="filterText"
-      placeholder="Filter keyword"
-      style="margin-bottom:30px;"
-    />
-    <el-tree
-      ref="tree2"
-      :data="data2"
-      :props="defaultProps"
-      :filter-node-method="filterNode"
-      class="filter-tree"
-      default-expand-all
-    />
-  </div>
+  <el-table :data="tableData" style="width: 100%">
+    <el-table-column prop="account" label="姓名" width="180"> </el-table-column>
+
+    <el-table-column prop="gender" label="性别" width="180"> </el-table-column>
+
+    <el-table-column prop="telephone" label="手机号"> </el-table-column>
+  </el-table>
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from 'vue-property-decorator'
-import { Tree as ElTree } from 'element-ui'
-import { TreeData } from 'element-ui/types/tree'
+import { Component, Vue, Watch } from 'vue-property-decorator';
+import { Tree as ElTree } from 'element-ui';
+import { TreeData } from 'element-ui/types/tree';
+import { UserModule } from '@/store/modules/user';
 
 @Component({
-  name: 'Tree'
+  name: 'usermanage'
 })
 export default class extends Vue {
-  private filterText = '';
-  private data2 = [{
-    id: 1,
-    label: 'Level one 1',
-    children: [{
-      id: 4,
-      label: 'Level two 1-1',
-      children: [{
-        id: 9,
-        label: 'Level three 1-1-1'
-      }, {
-        id: 10,
-        label: 'Level three 1-1-2'
-      }]
-    }]
-  }, {
-    id: 2,
-    label: 'Level one 2',
-    children: [{
-      id: 5,
-      label: 'Level two 2-1'
-    }, {
-      id: 6,
-      label: 'Level two 2-2'
-    }]
-  }, {
-    id: 3,
-    label: 'Level one 3',
-    children: [{
-      id: 7,
-      label: 'Level two 3-1'
-    }, {
-      id: 8,
-      label: 'Level two 3-2'
-    }]
-  }];
+  private tableData: [] = [];
 
-  private defaultProps = {
-    children: 'children',
-    label: 'label'
+  private userinfo = {
+    allAccount: true
   };
 
-  @Watch('filterText')
-  private onFilterTextChange(value: string) {
-    (this.$refs.tree2 as ElTree).filter(value)
+  created() {
+    this.handleUserquery().then((value) => {
+      this.tableData = value;
+    });
   }
 
-  private filterNode(value: string, data: TreeData) {
-    if (!value) { return true }
-    return data.label && data.label.indexOf(value) !== -1
+  private async handleUserquery() {
+    const { data } = await UserModule.Userquery(this.userinfo);
+    return data;
   }
 }
 </script>
