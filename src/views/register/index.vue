@@ -1,23 +1,25 @@
 <template>
-  <div class="login-container">
+  <div class="register-container">
     <el-form
-      ref="loginForm"
-      :model="loginForm"
-      :rules="loginRules"
-      class="login-form"
+      ref="registerForm"
+      :model="registerForm"
+      :rules="registerRules"
+      class="register-form"
       autocomplete="on"
       label-position="left"
     >
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">register form</h3>
       </div>
+
       <el-form-item prop="account">
+        <!-- account -->
         <span class="svg-container">
           <svg-icon name="user" />
         </span>
         <el-input
           ref="account"
-          v-model="loginForm.account"
+          v-model="registerForm.account"
           name="account"
           type="text"
           autocomplete="on"
@@ -26,13 +28,14 @@
       </el-form-item>
 
       <el-form-item prop="password">
+        <!-- password -->
         <span class="svg-container">
           <svg-icon name="password" />
         </span>
         <el-input
           :key="passwordType"
           ref="password"
-          v-model="loginForm.password"
+          v-model="registerForm.password"
           :type="passwordType"
           placeholder="password"
           name="password"
@@ -46,30 +49,107 @@
         </span>
       </el-form-item>
 
+      <el-form-item prop="role">
+        <!-- role -->
+        <span class="svg-container">
+          <svg-icon name="role" />
+        </span>
+        <el-input
+          ref="role"
+          v-model="registerForm.role"
+          name="role"
+          type="text"
+          autocomplete="on"
+          placeholder="role"
+        />
+      </el-form-item>
+
+      <el-form-item prop="name">
+        <!-- name -->
+        <span class="svg-container">
+          <svg-icon name="name" />
+        </span>
+        <el-input
+          ref="name"
+          v-model="registerForm.name"
+          name="name"
+          type="text"
+          autocomplete="on"
+          placeholder="name"
+        />
+      </el-form-item>
+
+      <el-form-item prop="gender">
+        <!-- gender -->
+        <span class="svg-container">
+          <svg-icon name="gender" />
+        </span>
+        <el-radio-group v-model="registerForm.gender" name="gender">
+          <el-radio label="男"></el-radio>
+          <el-radio label="女"></el-radio>
+        </el-radio-group>
+      </el-form-item>
+
+      <el-form-item prop="department">
+        <!-- department -->
+        <span class="svg-container">
+          <svg-icon name="department" />
+        </span>
+        <el-input
+          ref="department"
+          v-model="registerForm.department"
+          name="department"
+          type="text"
+          autocomplete="on"
+          placeholder="department"
+        />
+      </el-form-item>
+
+      <el-form-item prop="email">
+        <!-- email -->
+        <span class="svg-container">
+          <svg-icon name="email" />
+        </span>
+        <el-input
+          ref="email"
+          v-model="registerForm.email"
+          name="email"
+          autocomplete="on"
+          placeholder="email"
+        />
+      </el-form-item>
+
+      <el-form-item prop="telephone">
+        <!-- email -->
+        <span class="svg-container">
+          <svg-icon name="telephone" />
+        </span>
+        <el-input
+          ref="telephone"
+          v-model="registerForm.telephone"
+          name="telephone"
+          autocomplete="on"
+          placeholder="telephone"
+        />
+      </el-form-item>
+
       <el-button
         :loading="loading"
         type="primary"
         style="width: 100%; margin-bottom: 30px"
-        @click.native.prevent="handleLogin"
+        @click.native.prevent="handleRegister"
       >
-        Sign in
+        Register in
       </el-button>
 
       <el-button
         :loading="loading"
         type="primary"
         style="width: 100%; margin-bottom: 30px"
-        @click.native.prevent="jumpsign"
+        @click.native.prevent="handleUserquery"
       >
-        register in
+        user query
       </el-button>
-
-      <div style="position: relative">
-        <div class="tips">
-          <span> username: admin </span>
-          <span> password: any </span>
-        </div>
-      </div>
     </el-form>
   </div>
 </template>
@@ -82,12 +162,12 @@ import { Form as ElForm, Input } from 'element-ui';
 import { UserModule } from '@/store/modules/user';
 
 @Component({
-  name: 'Login'
+  name: 'Register'
 })
 export default class extends Vue {
   private validateUsername = (rule: any, value: string, callback: Function) => {
     if (value.length < 2) {
-      callback(new Error('The username can not be less than 2 digits'));
+      callback(new Error('The username can not be less than 6 digits'));
     } else {
       callback();
     }
@@ -95,18 +175,24 @@ export default class extends Vue {
 
   private validatePassword = (rule: any, value: string, callback: Function) => {
     if (value.length < 2) {
-      callback(new Error('The password can not be less than 2 digits'));
+      callback(new Error('The password can not be less than 6 digits'));
     } else {
       callback();
     }
   };
 
-  private loginForm = {
-    account: 'root',
-    password: 'root'
+  private registerForm = {
+    account: 'xiaweixiaolong',
+    password: 'rootroot',
+    role: 'user',
+    name: 'first_vue_user',
+    gender: '男',
+    department: 'A',
+    email: 'long@gmail.com',
+    telephone: '13870457868'
   };
 
-  private loginRules = {
+  private registerRules = {
     account: [{ validator: this.validateUsername, trigger: 'blur' }],
     password: [{ validator: this.validatePassword, trigger: 'blur' }]
   };
@@ -129,9 +215,9 @@ export default class extends Vue {
   }
 
   mounted() {
-    if (this.loginForm.account === '') {
+    if (this.registerForm.account === '') {
       (this.$refs.account as Input).focus();
-    } else if (this.loginForm.password === '') {
+    } else if (this.registerForm.password === '') {
       (this.$refs.password as Input).focus();
     }
   }
@@ -147,11 +233,11 @@ export default class extends Vue {
     });
   }
 
-  private handleLogin() {
-    (this.$refs.loginForm as ElForm).validate(async (valid: boolean) => {
+  private handleRegister() {
+    (this.$refs.registerForm as ElForm).validate(async (valid: boolean) => {
       if (valid) {
         this.loading = true;
-        await UserModule.Login(this.loginForm);
+        await UserModule.Register(this.registerForm);
         this.$router.push({
           path: this.redirect || '/',
           query: this.otherQuery
@@ -159,12 +245,33 @@ export default class extends Vue {
         // Just to simulate the time of the request
         setTimeout(() => {
           this.loading = false;
-        }, 0.5 * 10000);
+        }, 0.5 * 1000);
       } else {
         return false;
       }
     });
   }
+
+  // private handleUserquery() {
+  //   ;(this.$refs.registerForm as ElForm).validate(async (valid: boolean) => {
+  //     if (valid) {
+  //       this.loading = true
+  //       let account = this.registerForm.account
+  //       let allAccount = true
+  //       await UserModule.Userquery({ account, allAccount })
+  //       this.$router.push({
+  //         path: this.redirect || '/',
+  //         query: this.otherQuery
+  //       })
+
+  //       setTimeout(() => {
+  //         this.loading = false
+  //       }, 0.5 * 1000)
+  //     } else {
+  //       return false
+  //     }
+  //   })
+  // }
 
   private getOtherQuery(query: Dictionary<string>) {
     return Object.keys(query).reduce((acc, cur) => {
@@ -180,7 +287,7 @@ export default class extends Vue {
 <style lang="scss">
 // References: https://www.zhangxinxu.com/wordpress/2018/01/css-caret-color-first-line/
 @supports (-webkit-mask: none) and (not (cater-color: $loginCursorColor)) {
-  .login-container .el-input {
+  .register-container .el-input {
     input {
       color: $loginCursorColor;
     }
@@ -190,7 +297,7 @@ export default class extends Vue {
   }
 }
 
-.login-container {
+.register-container {
   .el-input {
     display: inline-block;
     height: 47px;
@@ -223,13 +330,13 @@ export default class extends Vue {
 </style>
 
 <style lang="scss" scoped>
-.login-container {
+.register-container {
   height: 100%;
   width: 100%;
   overflow: hidden;
   background-color: $loginBg;
 
-  .login-form {
+  .register-form {
     position: relative;
     width: 520px;
     max-width: 100%;

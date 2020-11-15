@@ -44,7 +44,7 @@ export default new Router({
           path: 'dashboard',
           component: () => import(/* webpackChunkName: "dashboard" */ '@/views/dashboard/index.vue'),
           meta: {
-            title: 'Dashboard',
+            title: 'kms密钥管理系统',
             icon: 'dashboard'
           }
         }
@@ -55,7 +55,7 @@ export default new Router({
       component: Layout,
       redirect: '/example/tree',
       meta: {
-        title: 'Example',
+        title: '系统管理',
         icon: 'example'
       },
       children: [
@@ -63,7 +63,7 @@ export default new Router({
           path: 'tree',
           component: () => import(/* webpackChunkName: "tree" */ '@/views/tree/index.vue'),
           meta: {
-            title: 'Tree',
+            title: '用户管理',
             icon: 'tree'
           }
         },
@@ -71,7 +71,7 @@ export default new Router({
           path: 'table',
           component: () => import(/* webpackChunkName: "table" */ '@/views/table/index.vue'),
           meta: {
-            title: 'Table',
+            title: '角色管理',
             icon: 'table'
           }
         }
@@ -91,6 +91,21 @@ export default new Router({
         }
       ]
     },
+    {
+      path: '/sign',
+      component:Layout,
+      children: [
+        {
+          path:'',
+          component: () => import(/* webpackChunkName: "login" */ '@/views/register/index.vue'),
+          meta: { 
+             title:'Sign',
+             icon: 'form'
+          }
+       }
+      ]  
+    },
+    
     {
       path: '/nested',
       component: Layout,
