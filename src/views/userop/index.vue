@@ -13,10 +13,11 @@
           </el-table-column>
 
           <el-table-column prop="telephone" label="手机号"> </el-table-column>
+
           <el-table-column label="操作">
             <template slot-scope="scope">
               <div>
-                <el-button type="primary" @click="handleUseUser(1)"
+                <el-button type="primary" @click="handleUseUser(1, scope.row)"
                   >修改</el-button
                 >
                 <el-button type="danger" @click="delUser(scope.account)"
@@ -28,6 +29,7 @@
         </el-table>
       </el-main>
     </el-container>
+
     <el-dialog
       :title="isEditUser ? '修改用户' : '新增用户'"
       :visible.sync="isUseUserDialog"
@@ -37,8 +39,10 @@
           <el-input
             v-model="postUserData.account"
             autocomplete="off"
+            :disabled="isEditUser"
           ></el-input>
         </el-form-item>
+
         <el-form-item
           v-if="!isEditUser"
           label="密码:"
@@ -48,8 +52,10 @@
             type="password"
             v-model="postUserData.password"
             autocomplete="off"
+            show-password
           ></el-input>
         </el-form-item>
+
         <el-form-item
           v-if="!isEditUser"
           label="角色:"
@@ -57,24 +63,29 @@
         >
           <el-input v-model="postUserData.role" autocomplete="off"></el-input>
         </el-form-item>
+
         <el-form-item label="别名:" :label-width="labelWidth">
           <el-input v-model="postUserData.name" autocomplete="off"></el-input>
         </el-form-item>
+
         <el-form-item label="性别:" :label-width="labelWidth">
           <el-radio-group v-model="postUserData.gender">
             <el-radio label="男">男</el-radio>
             <el-radio label="女">女</el-radio>
           </el-radio-group>
         </el-form-item>
+
         <el-form-item label="部门:" :label-width="labelWidth">
           <el-input
             v-model="postUserData.department"
             autocomplete="off"
           ></el-input>
         </el-form-item>
+
         <el-form-item label="邮箱:" :label-width="labelWidth">
           <el-input v-model="postUserData.email" autocomplete="off"></el-input>
         </el-form-item>
+
         <el-form-item label="手机号:" :label-width="labelWidth">
           <el-input
             v-model="postUserData.telephone"
@@ -82,6 +93,7 @@
           ></el-input>
         </el-form-item>
       </el-form>
+
       <div slot="footer" class="dialog-footer">
         <el-button @click="isUseUserDialog = false">取 消</el-button>
         <el-button type="primary" @click="postUser">确 定</el-button>
@@ -113,6 +125,8 @@ export default class extends Vue {
     email: '',
     telephone: ''
   };
+
+  private defaultpostuserData = this.postUserData;
   private isEditUser: Boolean = false;
   private labelWidth: String = '80px';
   private userinfo = {
@@ -124,37 +138,31 @@ export default class extends Vue {
       this.tableData = value;
     });
   }
-  private handleUseUser(type: Number) {
+
+  private handleUseUser(type: Number, rowdata?: any) {
     if (type == 0) {
       this.isEditUser = false;
-      this.postUserData = {
-        account: '',
-        password: '',
-        role: '',
-        name: '',
-        gender: '',
-        department: '',
-        email: '',
-        telephone: ''
-      };
+      this.postUserData = this.defaultpostuserData;
     } else {
+      this.postUserData = rowdata;
       this.isEditUser = true;
     }
     this.isUseUserDialog = !this.isUseUserDialog;
   }
 
+  // 用户修改或者提交
   private postUser() {
-    console.log(this.postUserData);
-
     (this.$refs.postUserForm as ElForm).validate(async (valid: boolean) => {
+      // 校验成功后处理
       if (valid) {
         let data: any = {};
         if (this.isEditUser) {
-          data = await UserModule.EditUser(this.postUserData);
+          data = await UserModule.EditUser(this.postUserData); // 修改
         } else {
-          data = await UserModule.Register(this.postUserData);
+          data = await UserModule.Register(this.postUserData); // 新增
         }
 
+        // 返回成功后处理
         if (data.status == 1) {
           Message({
             message: data.message || '成功',
@@ -166,14 +174,15 @@ export default class extends Vue {
             this.tableData = value;
           });
         }
-        console.log(data);
+        location.reload(); // 重新加载页面
       } else {
         return false;
       }
     });
   }
+
+  // 用户删除
   private async delUser(account: String) {
-    console.log(this.postUserData);
     let data = await UserModule.delUser(account);
     if (data.status == 1) {
       Message({
@@ -187,12 +196,15 @@ export default class extends Vue {
       });
     }
   }
+
+  // 用户查询
   private async handleUserquery() {
     const { data } = await UserModule.Userquery(this.userinfo);
     return data;
   }
 }
 </script>
+
 <style scoped>
 .header {
   display: flex;

@@ -35,7 +35,7 @@ export const delUser = (data: any) =>
   });
 export const editUser = (data: any) =>
   request({
-    url: '/v1/kms/user/updateinfo',
+    url: '/v1/kms/user/updateInfo',
     method: 'post',
     data
   });

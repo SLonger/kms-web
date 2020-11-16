@@ -252,27 +252,6 @@ export default class extends Vue {
     });
   }
 
-  // private handleUserquery() {
-  //   ;(this.$refs.registerForm as ElForm).validate(async (valid: boolean) => {
-  //     if (valid) {
-  //       this.loading = true
-  //       let account = this.registerForm.account
-  //       let allAccount = true
-  //       await UserModule.Userquery({ account, allAccount })
-  //       this.$router.push({
-  //         path: this.redirect || '/',
-  //         query: this.otherQuery
-  //       })
-
-  //       setTimeout(() => {
-  //         this.loading = false
-  //       }, 0.5 * 1000)
-  //     } else {
-  //       return false
-  //     }
-  //   })
-  // }
-
   private getOtherQuery(query: Dictionary<string>) {
     return Object.keys(query).reduce((acc, cur) => {
       if (cur !== 'redirect') {
