@@ -29,10 +29,9 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       });
-      return Promise.reject(new Error(res.message || 'Error'));
-    } else {
-      return Promise.resolve(response);
+      return Promise.reject(response);
     }
+    return Promise.resolve(response);
   },
   (error) => {
     Message({
@@ -40,7 +39,7 @@ service.interceptors.response.use(
       type: 'error',
       duration: 5 * 1000
     });
-    console.log('repose: error2');
+    console.log('reponse: error3');
     return Promise.reject(error);
   }
 );

@@ -20,7 +20,7 @@
                 <el-button type="primary" @click="handleUseUser(1, scope.row)"
                   >修改</el-button
                 >
-                <el-button type="danger" @click="delUser(scope.account)"
+                <el-button type="danger" @click="delUser(scope.row)"
                   >删除</el-button
                 >
               </div>
@@ -182,8 +182,9 @@ export default class extends Vue {
   }
 
   // 用户删除
-  private async delUser(account: String) {
-    let data = await UserModule.delUser(account);
+  private async delUser(datascrope: any) {
+    let account = datascrope.account;
+    let data = await UserModule.userdel({ account });
     if (data.status == 1) {
       Message({
         message: data.message || '成功',

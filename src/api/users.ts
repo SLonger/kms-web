@@ -23,19 +23,20 @@ export const logout = (data: any) =>
 
 export const userquery = (data: any) =>
   request({
-    url: '/v1/kms/user/queryInfo',
+    url: '/v1/kms/user/queryinfo',
     method: 'post',
     data
   });
+
 export const delUser = (data: any) =>
   request({
-    url: '/v1/kms/user/delete',
+    url: '/v1/kms/user/userdel',
     method: 'post',
     data
   });
 export const editUser = (data: any) =>
   request({
-    url: '/v1/kms/user/updateInfo',
+    url: '/v1/kms/user/updateinfo',
     method: 'post',
     data
   });

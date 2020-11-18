@@ -7,9 +7,11 @@ import {
 } from 'vuex-module-decorators';
 import { delUser, editUser, login, logout, sign, userquery } from '@/api/users';
 import { getToken, setToken, removeToken } from '@/utils/cookies';
+import { Message } from 'element-ui';
 import store from '@/store';
 import { format } from 'path';
 import { register } from 'register-service-worker';
+import { promises } from 'fs';
 
 export interface IUserState {
   token: string;
@@ -69,7 +71,6 @@ class User extends VuexModule implements IUserState {
     account = account.trim();
     const { data } = await login({ account, password });
 
-    console.log('login resp data: ', data);
     setToken(data.data.token);
     this.SET_TOKEN(data.data.token);
   }
@@ -93,8 +94,8 @@ class User extends VuexModule implements IUserState {
     return data;
   }
   @Action // 用户删除
-  public async delUser(account: String) {
-    const { data } = await delUser(account);
+  public async userdel(userinfo: { account: string }) {
+    const { data } = await delUser(userinfo);
     return data;
   }
 
@@ -110,12 +111,31 @@ class User extends VuexModule implements IUserState {
     if (this.token === '') {
       throw Error('LogOut: token is undefined!');
     }
-    const { data } = await logout('{}');
+    let isout = false;
 
-    removeToken();
-    this.SET_TOKEN('');
-    this.SET_ROLES([]);
-    return data;
+    await logout('{}')
+      .then((response) => {
+        removeToken();
+        this.SET_TOKEN('');
+        this.SET_ROLES([]);
+        isout = true;
+      })
+      .catch((response) => {
+        if (response.data.code === 752) {
+          removeToken();
+          this.SET_TOKEN('');
+          this.SET_ROLES([]);
+          isout = true;
+        } else {
+          Message({
+            message: response.data.message || 'Error',
+            type: 'error',
+            duration: 5 * 1000
+          });
+          isout = false;
+        }
+      });
+    return Promise.resolve(isout);
   }
 }
 

@@ -94,7 +94,10 @@ export default new Router({
       children: [
         {
           path: 'info',
-          component: () => import('@/views/keyclient/info/index.vue'),
+          component: () =>
+            import(
+              /* webpackChunkName: "tree" */ '@/views/keyclient/info/index.vue'
+            ),
           meta: {
             title: '使用方详情',
             icon: 'tree'
