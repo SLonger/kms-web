@@ -81,6 +81,7 @@ class User extends VuexModule implements IUserState {
     const { data } = await sign(userInfo);
     return data;
   }
+
   @Action // 修改
   public async EditUser(userInfo: UserinfoState) {
     userInfo.account = userInfo.account.trim();

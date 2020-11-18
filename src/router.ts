@@ -126,7 +126,9 @@ export default new Router({
         {
           path: 'info',
           component: () =>
-            import(/* webpackChunkName: "tree" */ '@/views/userop/index.vue'),
+            import(
+              /* webpackChunkName: "tree" */ '@/views/keymanage/index.vue'
+            ),
           meta: {
             title: '密钥详情',
             icon: 'tree'
