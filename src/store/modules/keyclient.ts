@@ -11,7 +11,8 @@ import {
   getHistory,
   getInfo,
   getrecords,
-  updateclientInfo
+  updateclientInfo,
+  addclientInfo
 } from '@/api/keyclient';
 import { Message } from 'element-ui';
 import store from '@/store';
@@ -50,6 +51,12 @@ class Keyclient extends VuexModule {
   @Action
   public async UpdateclientInfo(datascrope: any) {
     const { data } = await updateclientInfo(datascrope);
+    return data;
+  }
+
+  @Action
+  public async AddclientInfo(datascrope: any) {
+    const { data } = await addclientInfo(datascrope);
     return data;
   }
 }

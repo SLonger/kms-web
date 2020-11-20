@@ -2,7 +2,9 @@
   <div>
     <el-container>
       <el-header class="header">
-        <el-button type="primary" @click="handleUseUser(0)">新增</el-button>
+        <el-button type="primary" @click="isClientAddDialog = true"
+          >新增</el-button
+        >
       </el-header>
       <el-main>
         <el-collapse v-model="activeNames" @change="handleChange" accordion>
@@ -150,6 +152,114 @@
         >
       </div>
     </el-dialog>
+
+    <!-- 新增 -->
+    <el-dialog title="新增用户" :visible.sync="isClientAddDialog">
+      <el-form :model="postUserData" ref="postUserForm">
+        <el-form-item label="应用方名称:" label-width="80px">
+          <el-input
+            v-model="postUserData.nameCn"
+            autocomplete="off"
+            placeholder="北京应用方名称"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="发起者" label-width="80px">
+          <el-input
+            v-model="postUserData.initiator"
+            autocomplete="off"
+            placeholder="龙天"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="省份" label-width="80px">
+          <el-input
+            v-model="postUserData.srcProv"
+            autocomplete="off"
+            placeholder="北京"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="应用方类型" label-width="80px">
+          <el-radio-group v-model="postUserData.applyType">
+            <el-radio label="加密">加密方</el-radio>
+            <el-radio label="解密">解密方</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
+        <el-form-item label="英文名" label-width="80px">
+          <el-input
+            v-model="postUserData.nameEn"
+            autocomplete="off"
+            placeholder="beijing-applyEname"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="话单省份" label-width="80px">
+          <el-input
+            v-model="postUserData.scope"
+            autocomplete="off"
+            placeholder="多个用 | 分离：  北京|天津|河北 "
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="email" label-width="80px">
+          <el-input
+            v-model="postUserData.email"
+            autocomplete="off"
+            placeholder="xxx@gmail.com"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="有效截至时间" label-width="80px">
+          <!-- 这里得插入一个时间 -->
+
+          <div>
+            <el-date-picker
+              v-model="postUserData.dueTime"
+              value-format="timestamp"
+              type="datetime"
+              placeholder="选择日期时间"
+            >
+            </el-date-picker>
+          </div>
+
+          <!-- <el-input
+            v-model="postUserData.dueTime"
+            autocomplete="off"
+          ></el-input> -->
+        </el-form-item>
+
+        <el-form-item label="电话" label-width="80px">
+          <el-input
+            v-model="postUserData.telephone"
+            autocomplete="off"
+            placeholder="139********"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="IP白名单" label-width="80px">
+          <el-input
+            v-model="postUserData.ipAddrs"
+            autocomplete="off"
+            placeholder="多个IP 使用 | 分割 192.168.0.1|192.168.0.2"
+          ></el-input>
+        </el-form-item>
+
+        <el-form-item label="Mac地址列" label-width="80px">
+          <el-input
+            v-model="postUserData.macAddrs"
+            autocomplete="off"
+            placeholder="对应多个mac使用 | 分割 ff:ff:ff:ff:ff:ff | ff:ff:ff:ff:ff:ff"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="isClientAddDialog = false">取 消</el-button>
+        <el-button type="primary" @click="postUser">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -172,12 +282,29 @@ export default class extends Vue {
   private info: any = {};
   private activeNames: any = '';
 
+  private postUserData = {
+    nameCn: '',
+    initiator: '',
+    srcProv: '',
+    applyType: '',
+    nameEn: '',
+    scope: '',
+    email: '',
+    dueTime: 0,
+    telephone: '',
+    ipAddrs: '',
+    macAddrs: ''
+  };
+
   // 用来转换数据
   private type = {};
   private isVaild = {};
 
   // 用来展示数据是否可修改
   private isEditUser = true;
+
+  // 显示新增对话框
+  private isClientAddDialog = false;
 
   // button是否能点击
   private isButtonuse = true;
@@ -241,9 +368,29 @@ export default class extends Vue {
 
   // 修改信息 todo
   private async updateinfo() {
-    console.log('updateinfo: ', this.info);
-    //let data = await keyclinetModule.UpdateclientInfo(this.info);
-    //console.log('updateinfo: ', data);
+    let data = await keyclinetModule.UpdateclientInfo(this.info);
+    if (data.status == 1) {
+      Message({
+        message: '修改成功',
+        type: 'success',
+        duration: 5 * 1000
+      });
+
+      this.isInfoVisible = false;
+    }
+    console.log(data);
+  }
+
+  private async postUser() {
+    let data = await keyclinetModule.AddclientInfo(this.postUserData);
+    Message({
+      message: '添加成功',
+      type: 'success',
+      duration: 5 * 1000
+    });
+
+    this.isClientAddDialog = false;
+    console.log(data);
   }
 }
 </script>

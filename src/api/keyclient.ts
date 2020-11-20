@@ -33,7 +33,14 @@ export const getrecords = (data: any) =>
   });
 export const updateclientInfo = (data: any) =>
   request({
-    url: '/v1/kms/view/clientrecords',
+    url: '/v1/kms/user/workerorderupdate',
+    method: 'post',
+    data
+  });
+
+export const addclientInfo = (data: any) =>
+  request({
+    url: '/v1/kms/user/workeorderadd',
     method: 'post',
     data
   });
