@@ -32,7 +32,7 @@ interface UserinfoState {
   telephone?: string;
 }
 
-@Module({ dynamic: true, store, name: 'user' })
+@Module({ dynamic: true, store, name: 'usermodule' })
 class User extends VuexModule implements IUserState {
   public token = getToken() || '';
   public name = '';

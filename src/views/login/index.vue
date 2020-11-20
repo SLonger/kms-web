@@ -37,7 +37,6 @@
           placeholder="password"
           name="password"
           autocomplete="on"
-          @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
           <svg-icon
@@ -53,15 +52,6 @@
         @click.native.prevent="handleLogin"
       >
         Sign in
-      </el-button>
-
-      <el-button
-        :loading="loading"
-        type="primary"
-        style="width: 100%; margin-bottom: 30px"
-        @click.native.prevent="jumpsign"
-      >
-        register in
       </el-button>
 
       <div style="position: relative">

@@ -1,21 +1,18 @@
 <template>
   <div>
     <el-container>
-      <el-header class="header">
-        <el-button type="primary" @click="handleUseUser(0)">新增</el-button>
-      </el-header>
       <el-main>
         <el-table :data="tableData" style="width: 100%">
           <el-table-column prop="name" label="省份" width="180">
           </el-table-column>
 
-          <el-table-column prop="keyscret" label="密钥版本号" width="180">
+          <el-table-column prop="keyversion" label="密钥版本号" width="180">
           </el-table-column>
 
           <el-table-column label="操作">
             <template slot-scope="scope">
               <div>
-                <el-button type="primary" @click="historyprovkey(scope.row)"
+                <el-button type="primary" @click="Historyprovkey(scope.row)"
                   >历史密钥</el-button
                 >
               </div>
@@ -23,6 +20,19 @@
           </el-table-column>
         </el-table>
       </el-main>
+
+      <el-dialog title="历史密钥" :visible.sync="keymanageVisible">
+        <el-table :data="history">
+         <el-table-column property="keyversion"
+                         label="密钥版本号"
+                         width="250"></el-table-column>
+        <el-table-column property="time"
+                         label="创建日期"
+                         width="200"></el-table-column>
+        </el-table>
+        
+        </el-table-column>
+      </el-dialog>
     </el-container>
   </div>
 </template>
@@ -39,6 +49,8 @@ import { KeyManageModule } from '@/store/modules/keymanages';
 })
 export default class extends Vue {
   private tableData: [] = [];
+  private history: [] = [];
+  private keymanageVisible: boolean = false;
 
   created() {
     this.provkeyquery().then((value) => {
@@ -53,15 +65,14 @@ export default class extends Vue {
   }
 
   // 查询历史密钥
-  private async historyprovkey(data: any) {
-    console.log('he');
+  private async Historyprovkey(datascrope: any) {
+    let provname: string = datascrope.name;
+    const { data } = await KeyManageModule.Historyprovscrets({ provname });
+    this.history = data;
+    console.log('this.history: ', this.history);
+    this.keymanageVisible = true;
   }
 }
 </script>
 
-<style scoped>
-.header {
-  display: flex;
-  align-items: center;
-}
-</style>
+

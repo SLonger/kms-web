@@ -5,7 +5,13 @@ import {
   Mutation,
   getModule
 } from 'vuex-module-decorators';
-import { provkeys } from '@/api/keymanages';
+import {
+  provkeys,
+  dispatchrecords,
+  historyprovscrets,
+  manualquerykey
+} from '@/api/keymanages';
+
 import { Message } from 'element-ui';
 import store from '@/store';
 import { format } from 'path';
@@ -28,6 +34,23 @@ class Keymanage extends VuexModule implements KeyManageState {
   @Action // 查询所有省份密钥
   public async Provkeys() {
     const { data } = await provkeys('{}');
+    return data;
+  }
+
+  @Action // 查询历史密钥
+  public async Historyprovscrets(userinfo: { provname: string }) {
+    const { data } = await historyprovscrets(userinfo);
+    return data;
+  }
+
+  @Action // 查询分发记录
+  public async Dispatchrecords(dataparm: any) {
+    const { data } = await dispatchrecords(dataparm);
+    return data;
+  }
+  @Action // 手动查询密钥
+  public async Manualquerykey(dataparm: any) {
+    const { data } = await manualquerykey(dataparm);
     return data;
   }
 }
